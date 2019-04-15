@@ -7,7 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.Button;
+import android.widget.EditText;
 
 
 public class ShowSearchFragment extends Fragment {
@@ -51,6 +52,15 @@ public class ShowSearchFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        Button showButton=(Button)getView().findViewById(R.id.show_search_button);
+        showButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText searchText=(EditText)getView().findViewById(R.id.show_search_text);
+                String search=searchText.getText().toString();
+                mListener.onClickShowSearch(search);
+            }
+        });
     }
 
     @Override
@@ -78,18 +88,12 @@ public class ShowSearchFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+    public void beginSearch(View view)
+    {
+
+    }
     public interface OnShowSearchListener {
         // TODO: Update argument type and name
-        void onClickSearch(String show);
+        void onClickShowSearch(String show);
     }
 }

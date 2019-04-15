@@ -52,8 +52,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
 
     @Override
-    public void onClickSearch(String show) {
-
+    public void onClickShowSearch(String show) {
+        new FetchDetails(show).execute(true);
     }
 
     @Override

@@ -36,6 +36,11 @@
         android:id="@+id/show_search_text"
         android:hint="@string/tv_show"
         android:inputType="text"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:id="@+id/show_search_button"/>
     </LinearLayout>
 
 </FrameLayout>
