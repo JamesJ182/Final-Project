@@ -3,6 +3,7 @@ package edu.quinnipiac.ser210.finalproject;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,6 +53,11 @@ public class ShowSearchFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         Button showButton=(Button)getView().findViewById(R.id.show_search_button);
         showButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +67,7 @@ public class ShowSearchFragment extends Fragment {
                 mListener.onClickShowSearch(search);
             }
         });
+        super.onActivityCreated(savedInstanceState);
     }
 
     @Override

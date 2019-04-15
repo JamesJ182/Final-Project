@@ -89,7 +89,6 @@ public class FetchDetails extends AsyncTask<Boolean,Void,Void> {
 
     @Override
     protected void onPostExecute(Void aVoid) {
-        Log.e("void as a string?",aVoid.toString());
         super.onPostExecute(aVoid);
     }
 
