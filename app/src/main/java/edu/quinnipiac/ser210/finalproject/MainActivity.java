@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         //UberNova: "He's back"
         //James Jacobson is coolmanthegreat
         //James and the Jacobsons
+        //Come on and slam
     }
 
 
