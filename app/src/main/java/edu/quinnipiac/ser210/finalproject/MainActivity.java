@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         tabs.setupWithViewPager(viewPager);
 
         //UberNova: "He's back"
+        //James Jacobson is coolmanthegreat
     }
 
 
