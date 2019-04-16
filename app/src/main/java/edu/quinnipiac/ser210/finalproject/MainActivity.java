@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private final static int FAVORITES_FRAGMENT=2;
     private static boolean isSearchingForShow;
     private static boolean isSearchingForActor;
+    private Fragment fragAt0;
     SectionsPagerAdapter adapter;
 
     @Override
@@ -69,8 +70,10 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     public void onClickShowSearch(String show) {
         //new FetchDetails(show).execute(true);
-        //FragmentTransaction ft=getSupportFragmentManager().beginTransaction();
-        //ft.replace(R.layout.fragment_show_search,new ShowFragment());
+        FragmentTransaction ft=getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.frag_container,new ShowFragment());
+        ft.commit();
+        Log.e("Clicking?","Yes");
 
 
 
