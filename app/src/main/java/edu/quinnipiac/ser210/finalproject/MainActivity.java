@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     public void onClickShowSearch(String show) {
         //new FetchDetails(show).execute(true);
+
     }
 
     @Override
@@ -129,10 +130,12 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         public int getItemPosition(@NonNull Object object) {
             if (object instanceof ShowSearchFragment &&
                     fragAt0 instanceof ShowFragment) {
+                Log.e("fragAt0 is ","ShowFragment");
                 return POSITION_NONE;
             }
             if (object instanceof ShowFragment &&
                     fragAt0 instanceof ShowSearchFragment) {
+                Log.e("fragAt0 is ","ShowSearchFragment");
                 return POSITION_NONE;
             }
             return POSITION_UNCHANGED;
@@ -141,14 +144,13 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
             @Override
             public void onSwitchToNextFragment() {
-                getSupportFragmentManager().beginTransaction().remove(fragAt0).commit();
+                getSupportFragmentManager().beginTransaction().remove(fragAt0).commitNow();
                 if (fragAt0 instanceof ShowSearchFragment){
                     fragAt0 = ShowFragment.newInstance(fpl);
                 }else{ // Instance of NextFragment
                     fragAt0 = ShowSearchFragment.newInstance(fpl);
                 }
                 notifyDataSetChanged();
-                //fragAt0.onCreateView(getLayoutInflater(),)null)
             }
         }
     }

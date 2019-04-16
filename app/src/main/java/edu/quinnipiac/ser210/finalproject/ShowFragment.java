@@ -67,7 +67,6 @@ public class ShowFragment extends Fragment {
     public void backPressed()
     {
         fragmentListener.onSwitchToNextFragment();
-
     }
 
     @Override
