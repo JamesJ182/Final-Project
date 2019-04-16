@@ -2,6 +2,7 @@ package edu.quinnipiac.ser210.finalproject;
 
 import android.content.Context;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -70,16 +71,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     public void onClickShowSearch(String show) {
         //new FetchDetails(show).execute(true);
-        FragmentTransaction ft=getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.frag_container,new ShowFragment());
-        ft.commit();
-        Log.e("Clicking?","Yes");
-
-
-
-
-
-
     }
 
     @Override
@@ -89,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+        FirstPageListener fpl=new FirstPageListener();
         private SectionsPagerAdapter(FragmentManager fm)
         {
             super(fm);
@@ -99,7 +91,11 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             switch (i)
             {
                 case SHOW_FRAGMENT:
-                    return new ShowSearchFragment();
+                    if (fragAt0 == null)
+                    {
+                        fragAt0 = ShowSearchFragment.newInstance(fpl);
+                    }
+                    return fragAt0;
                 case ACTOR_FRAGMENT:
                     //return new ActorFragment();
                 case FAVORITES_FRAGMENT:
@@ -127,6 +123,33 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                     return "Favorites";
             }
             return null;
+        }
+
+        @Override
+        public int getItemPosition(@NonNull Object object) {
+            if (object instanceof ShowSearchFragment &&
+                    fragAt0 instanceof ShowFragment) {
+                return POSITION_NONE;
+            }
+            if (object instanceof ShowFragment &&
+                    fragAt0 instanceof ShowSearchFragment) {
+                return POSITION_NONE;
+            }
+            return POSITION_UNCHANGED;
+        }
+        private final class FirstPageListener implements FirstPageFragmentListener {
+
+            @Override
+            public void onSwitchToNextFragment() {
+                getSupportFragmentManager().beginTransaction().remove(fragAt0).commit();
+                if (fragAt0 instanceof ShowSearchFragment){
+                    fragAt0 = ShowFragment.newInstance(fpl);
+                }else{ // Instance of NextFragment
+                    fragAt0 = ShowSearchFragment.newInstance(fpl);
+                }
+                notifyDataSetChanged();
+                //fragAt0.onCreateView(getLayoutInflater(),)null)
+            }
         }
     }
 }

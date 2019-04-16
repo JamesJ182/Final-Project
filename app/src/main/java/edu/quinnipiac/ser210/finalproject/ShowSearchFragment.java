@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ public class ShowSearchFragment extends Fragment {
     private String mParam2;
 
     private OnShowSearchListener mListener;
+    private static FirstPageFragmentListener fragmentListener;
 
     public ShowSearchFragment() {
         // Required empty public constructor
@@ -46,6 +48,14 @@ public class ShowSearchFragment extends Fragment {
         return fragment;
     }
 
+    public static ShowSearchFragment newInstance(FirstPageFragmentListener listener)
+    {
+        ShowSearchFragment fragment = new ShowSearchFragment();
+        fragmentListener=listener;
+        return fragment;
+    }
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +75,7 @@ public class ShowSearchFragment extends Fragment {
                 EditText searchText=(EditText)getView().findViewById(R.id.show_search_text);
                 String search=searchText.getText().toString();
                 mListener.onClickShowSearch(search);
+                fragmentListener.onSwitchToNextFragment();
             }
         });
         super.onActivityCreated(savedInstanceState);
@@ -74,6 +85,8 @@ public class ShowSearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        int containerId=container.getId();
+        Log.e("ContainerId=",containerId+"");
         return inflater.inflate(R.layout.fragment_show_search, container, false);
     }
 
