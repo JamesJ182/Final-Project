@@ -51,7 +51,7 @@ public class ShowSearchFragment extends Fragment {
     public static ShowSearchFragment newInstance(FirstPageFragmentListener listener)
     {
         ShowSearchFragment fragment = new ShowSearchFragment();
-        fragmentListener=listener;
+        fragmentListener = listener;
         return fragment;
     }
 
