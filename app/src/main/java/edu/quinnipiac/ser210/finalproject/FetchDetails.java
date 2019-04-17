@@ -1,5 +1,7 @@
 package edu.quinnipiac.ser210.finalproject;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
@@ -20,15 +22,19 @@ public class FetchDetails extends AsyncTask<Boolean,Void,Void> {
     private final String PART_OF_URL = "https://tvjan-tvmaze-v1.p.rapidapi.com/search/shows?q=";
     private String[] showNames;
     private String[] showNameJSON;
+    private Context context;
+    private Boolean isShow;
+    private OnResultComplete resultListener;
 
-    public FetchDetails(String str)
+    public FetchDetails(String str, Context context)
     {
         this.search=str;
+        this.context=context;
     }
 
     @Override
     protected Void doInBackground(Boolean... booleans) {
-        boolean isShow=booleans[0];
+        isShow=booleans[0];
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
         if(isShow)
@@ -89,6 +95,29 @@ public class FetchDetails extends AsyncTask<Boolean,Void,Void> {
 
     @Override
     protected void onPostExecute(Void aVoid) {
+        Intent intent=new Intent(context,ShowResultsActivity.class);
+        if(isShow)
+        {
+            intent.putExtra("Show Names",showNames);
+            intent.putExtra("JSON Strings",showNameJSON);
+        }
+        else
+        {
+            /*
+            For actors
+            intent.putExtra("Show Names",showNames);
+            intent.putExtra("JSON Strings",showNameJSON);
+            */
+        }
+        if (context instanceof OnResultComplete) {
+            resultListener = (OnResultComplete) context;
+        }
+        else
+        {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnResultListener");
+        }
+        resultListener.startResultActivity(intent);
         super.onPostExecute(aVoid);
     }
 
@@ -115,6 +144,12 @@ public class FetchDetails extends AsyncTask<Boolean,Void,Void> {
     {
         return showNameJSON;
     }
+
+    public interface OnResultComplete
+    {
+        void startResultActivity(Intent intent);
+    }
+
 
 
 
