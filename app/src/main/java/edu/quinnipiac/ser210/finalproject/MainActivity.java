@@ -1,6 +1,7 @@
 package edu.quinnipiac.ser210.finalproject;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,7 +23,8 @@ import android.widget.TextView;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,
-        ShowSearchFragment.OnShowSearchListener,FavoritesFragment.OnFragmentInteractionListener, ActorSearchFragment.OnActorSearchListener{
+        ShowSearchFragment.OnShowSearchListener,FavoritesFragment.OnFragmentInteractionListener, ActorSearchFragment.OnActorSearchListener,
+    FetchDetails.OnResultComplete{
 
     private final static int SHOW_FRAGMENT=0;
     private final static int ACTOR_FRAGMENT=1;
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_main);
         TabLayout tabs=findViewById(R.id.tabs);
         ViewPager viewPager=findViewById(R.id.pager);
@@ -65,19 +68,24 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     @Override
     public void onClickShowSearch(String show) {
-//        new FetchDetails(show).execute(true);
+        new FetchDetails(show,this).execute(true);
     }
 
 
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-        //PooPoo
+
     }
 
     @Override
     public void onClickActorSearch(String actor) {
         new FetchDetails(actor,this).execute(false);
+    }
+
+    @Override
+    public void startResultActivity(Intent intent) {
+        startActivity(intent);
     }
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -93,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 case SHOW_FRAGMENT:
                     return new ShowSearchFragment();
                 case ACTOR_FRAGMENT:
-                    //return new ActorFragment();
+                    return new ActorSearchFragment();
                 case FAVORITES_FRAGMENT:
                     return new FavoritesFragment();
 
