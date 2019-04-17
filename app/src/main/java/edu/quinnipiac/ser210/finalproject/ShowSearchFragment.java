@@ -23,7 +23,6 @@ public class ShowSearchFragment extends Fragment {
     private String mParam2;
 
     private OnShowSearchListener mListener;
-    private static FirstPageFragmentListener fragmentListener;
 
     public ShowSearchFragment() {
         // Required empty public constructor
@@ -47,13 +46,6 @@ public class ShowSearchFragment extends Fragment {
         return fragment;
     }
 
-    public static ShowSearchFragment newInstance(FirstPageFragmentListener listener)
-    {
-        ShowSearchFragment fragment = new ShowSearchFragment();
-        fragmentListener=listener;
-        return fragment;
-    }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,7 +66,6 @@ public class ShowSearchFragment extends Fragment {
                 EditText searchText=(EditText)getView().findViewById(R.id.show_search_text);
                 String search=searchText.getText().toString();
                 mListener.onClickShowSearch(search);
-                fragmentListener.onSwitchToNextFragment();
             }
         });
         super.onActivityCreated(savedInstanceState);
