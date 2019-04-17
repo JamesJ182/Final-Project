@@ -1,7 +1,6 @@
 package edu.quinnipiac.ser210.finalproject;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,7 +22,7 @@ import android.widget.TextView;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,
-        ShowSearchFragment.OnShowSearchListener,FavoritesFragment.OnFragmentInteractionListener,FetchDetails.OnResultComplete{
+        ShowSearchFragment.OnShowSearchListener,FavoritesFragment.OnFragmentInteractionListener, ActorSearchFragment.OnActorSearchListener{
 
     private final static int SHOW_FRAGMENT=0;
     private final static int ACTOR_FRAGMENT=1;
@@ -66,8 +65,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     @Override
     public void onClickShowSearch(String show) {
-        new FetchDetails(show,this).execute(true);
+//        new FetchDetails(show).execute(true);
     }
+
 
 
     @Override
@@ -76,8 +76,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     }
 
     @Override
-    public void startResultActivity(Intent intent) {
-        startActivity(intent);
+    public void onClickActorSearch(String actor) {
+        new FetchDetails(actor,this).execute(false);
     }
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
