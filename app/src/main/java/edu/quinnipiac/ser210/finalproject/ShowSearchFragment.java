@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +50,7 @@ public class ShowSearchFragment extends Fragment {
     public static ShowSearchFragment newInstance(FirstPageFragmentListener listener)
     {
         ShowSearchFragment fragment = new ShowSearchFragment();
-        fragmentListener = listener;
+        fragmentListener=listener;
         return fragment;
     }
 
@@ -85,8 +84,6 @@ public class ShowSearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        int containerId=container.getId();
-        Log.e("ContainerId=",containerId+"");
         return inflater.inflate(R.layout.fragment_show_search, container, false);
     }
 

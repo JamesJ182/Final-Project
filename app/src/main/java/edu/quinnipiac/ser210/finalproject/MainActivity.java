@@ -22,7 +22,7 @@ import android.widget.TextView;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,
-        ShowSearchFragment.OnShowSearchListener,FavoritesFragment.OnFragmentInteractionListener,ShowFragment.OnFragmentInteractionListener {
+        ShowSearchFragment.OnShowSearchListener,FavoritesFragment.OnFragmentInteractionListener{
 
     private final static int SHOW_FRAGMENT=0;
     private final static int ACTOR_FRAGMENT=1;
@@ -43,11 +43,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         tabs.setupWithViewPager(viewPager);
         isSearchingForActor=true;
         isSearchingForShow=true;
-
-        //UberNova: "He's back"
-        //James Jacobson is coolmanthegreat
-        //James and the Jacobsons
-        //Come on and slam
     }
 
 
@@ -71,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     public void onClickShowSearch(String show) {
         //new FetchDetails(show).execute(true);
-
     }
 
     @Override
@@ -80,8 +74,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     }
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        FirstPageListener fpl=new FirstPageListener();
         private SectionsPagerAdapter(FragmentManager fm)
         {
             super(fm);
@@ -92,11 +84,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             switch (i)
             {
                 case SHOW_FRAGMENT:
-                    if (fragAt0 == null)
-                    {
-                        fragAt0 = ShowSearchFragment.newInstance(fpl);
-                    }
-                    return fragAt0;
+                    return new ShowSearchFragment();
                 case ACTOR_FRAGMENT:
                     //return new ActorFragment();
                 case FAVORITES_FRAGMENT:
@@ -124,34 +112,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                     return "Favorites";
             }
             return null;
-        }
-
-        @Override
-        public int getItemPosition(@NonNull Object object) {
-            if (object instanceof ShowSearchFragment &&
-                    fragAt0 instanceof ShowFragment) {
-                Log.e("fragAt0 is ","ShowFragment");
-                return POSITION_NONE;
-            }
-            if (object instanceof ShowFragment &&
-                    fragAt0 instanceof ShowSearchFragment) {
-                Log.e("fragAt0 is ","ShowSearchFragment");
-                return POSITION_NONE;
-            }
-            return POSITION_UNCHANGED;
-        }
-        private final class FirstPageListener implements FirstPageFragmentListener {
-
-            @Override
-            public void onSwitchToNextFragment() {
-                getSupportFragmentManager().beginTransaction().remove(fragAt0).commitNow();
-                if (fragAt0 instanceof ShowSearchFragment){
-                    fragAt0 = ShowFragment.newInstance(fpl);
-                }else{ // Instance of NextFragment
-                    fragAt0 = ShowSearchFragment.newInstance(fpl);
-                }
-                notifyDataSetChanged();
-            }
         }
     }
 }
