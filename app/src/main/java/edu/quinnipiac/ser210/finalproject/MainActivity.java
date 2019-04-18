@@ -29,9 +29,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private final static int SHOW_FRAGMENT=0;
     private final static int ACTOR_FRAGMENT=1;
     private final static int FAVORITES_FRAGMENT=2;
-    private static boolean isSearchingForShow;
-    private static boolean isSearchingForActor;
-    private Fragment fragAt0;
     SectionsPagerAdapter adapter;
 
     @Override
@@ -44,8 +41,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         adapter=new SectionsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
         tabs.setupWithViewPager(viewPager);
-        isSearchingForActor=true;
-        isSearchingForShow=true;
     }
 
 

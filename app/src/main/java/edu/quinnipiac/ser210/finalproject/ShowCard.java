@@ -37,6 +37,7 @@ public class ShowCard{
         this.image=new ImageView(context);
         new DownloadImageFromInternet(image).execute(imageURL);
         button=new Button(context);
+        button.setText("Add to favorites");
         card=new CardView(context);
         tableLayout=new TableLayout(context);
         TableRow row1=new TableRow(context);
@@ -46,9 +47,12 @@ public class ShowCard{
         row2.addView(this.rating);
         row2.addView(this.status);
         row2.addView(this.button);
+        row1.setPadding(100,100,100,100);
+        row2.setPadding(100,100,100,100);
         tableLayout.addView(row1);
         tableLayout.addView(row2);
         card.addView(tableLayout);
+        card.setPadding(20,20,20,20);
     }
 
     public TextView getName() {
