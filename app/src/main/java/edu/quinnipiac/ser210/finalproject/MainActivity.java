@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         startActivity(intent);
     }
 
+    //Serves as an adapter for the ViewPager and places the correct Fragments in each tab.
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
         private SectionsPagerAdapter(FragmentManager fm)
         {
@@ -93,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         }
 
         @Override
+        //Returns the corresponding Fragment for each tab
         public Fragment getItem(int i) {
             switch (i)
             {
@@ -108,12 +110,14 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         }
 
         @Override
+        //Determines how many tabs will be in the TabLayout
         public int getCount() {
             return 3;
         }
 
         @Nullable
         @Override
+        //Returns the title of a Fragment
         public CharSequence getPageTitle(int position) {
             switch (position)
             {
