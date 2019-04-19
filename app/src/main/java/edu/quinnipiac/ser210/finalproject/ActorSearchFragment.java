@@ -13,7 +13,6 @@ import android.widget.EditText;
 
 
 public class ActorSearchFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -28,15 +27,7 @@ public class ActorSearchFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ActorSearchFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static ActorSearchFragment newInstance(String param1, String param2) {
         ActorSearchFragment fragment = new ActorSearchFragment();
         Bundle args = new Bundle();
@@ -46,6 +37,12 @@ public class ActorSearchFragment extends Fragment {
         return fragment;
     }
 
+
+    /*
+    When the search button is clicked, the text from the search text (EditText) gets converted
+    to a string. That string is then sent to mListener which is responsible for
+    passing the string to the AsyncTask (FetchDetails)
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +54,7 @@ public class ActorSearchFragment extends Fragment {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        //
         Button showButton=(Button)getView().findViewById(R.id.actor_search_button);
         showButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +70,7 @@ public class ActorSearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // Fragment layout inflated
         return inflater.inflate(R.layout.fragment_actor_search, container, false);
     }
 
@@ -99,7 +97,6 @@ public class ActorSearchFragment extends Fragment {
     }
 
     public interface OnActorSearchListener {
-        // TODO: Update argument type and name
         void onClickActorSearch(String actor);
     }
 }

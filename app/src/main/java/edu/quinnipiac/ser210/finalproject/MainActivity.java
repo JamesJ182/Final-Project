@@ -22,6 +22,12 @@ import android.widget.TextView;
 
 import java.util.List;
 
+/**
+ * MainActivity class is responsible for nesting a TabLayout (containing 3 tabs)
+ * and each tab nests a fragment (ShowSearchFragment, ActorSearchFragment, FavoritesFragment)
+ *
+ */
+
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,
         ShowSearchFragment.OnShowSearchListener,FavoritesFragment.OnFragmentInteractionListener, ActorSearchFragment.OnActorSearchListener,
     FetchDetails.OnResultComplete{
@@ -34,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(R.style.AppTheme);
+        setTheme(R.style.AppTheme); // After the Splash Screen is displayed (which takes place in MainActivity), setTheme sets the style back to the normal layout
         setContentView(R.layout.activity_main);
         TabLayout tabs=findViewById(R.id.tabs);
         ViewPager viewPager=findViewById(R.id.pager);
@@ -42,8 +48,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         viewPager.setAdapter(adapter);
         tabs.setupWithViewPager(viewPager);
     }
-
-
 
     @Override
     public void onPageScrolled(int i, float v, int i1) {
@@ -60,13 +64,11 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     }
 
-
     @Override
     public void onClickShowSearch(String show) {
+        //Searching for a show sets boolean = true which tells FetchDetails to grab JSON Data related to shows
         new FetchDetails(show,this).execute(true);
     }
-
-
 
     @Override
     public void onFragmentInteraction(Uri uri) {
@@ -75,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     @Override
     public void onClickActorSearch(String actor) {
+        //Searching for an actor sets boolean = false which tells FetchDetails to grab JSON Data related to actors
         new FetchDetails(actor,this).execute(false);
     }
 

@@ -15,6 +15,11 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * The FetchDetails class works in 2 ways (based on a boolean value).
+ * If isShow is true, the AsyncTask will retrieve JSON data from the API related to TV Shows.
+ * If isShow is false, the AsyncTask will retrieve JSON data from the API related to Actors (to be implemented).
+ */
 
 public class FetchDetails extends AsyncTask<Boolean,Void,Void> {
 
@@ -98,6 +103,7 @@ public class FetchDetails extends AsyncTask<Boolean,Void,Void> {
         Intent intent=new Intent(context,ShowResultsActivity.class);
         if(isShow)
         {
+            //Storing information in the intent
             intent.putExtra("Show Names",showNames);
             intent.putExtra("JSON Strings",showNameJSON);
         }
@@ -105,6 +111,7 @@ public class FetchDetails extends AsyncTask<Boolean,Void,Void> {
         {
             /*
             For actors
+            //Storing information in the intent
             intent.putExtra("Show Names",showNames);
             intent.putExtra("JSON Strings",showNameJSON);
             */
@@ -145,6 +152,7 @@ public class FetchDetails extends AsyncTask<Boolean,Void,Void> {
         return showNameJSON;
     }
 
+    //After retrieving information, the data gets sent to the Result Activity.
     public interface OnResultComplete
     {
         void startResultActivity(Intent intent);
