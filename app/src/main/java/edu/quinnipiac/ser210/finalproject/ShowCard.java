@@ -7,9 +7,12 @@ import android.os.AsyncTask;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.CardView;
+import android.util.LayoutDirection;
 import android.util.Log;
+import android.view.Gravity;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -26,33 +29,39 @@ public class ShowCard{
     private Button button;
     private TableLayout tableLayout;
 
-    public ShowCard (String name, String status, String imageURL, int rating, Context context)
+    public ShowCard (String name, String status, String imageURL, String rating, Context context)
     {
+        LinearLayout.LayoutParams cardMargins = new LinearLayout.LayoutParams(CardView.LayoutParams.WRAP_CONTENT, CardView.LayoutParams.WRAP_CONTENT);
+        cardMargins.setMargins(20,20,20,20);
         this.name=new TextView(context);
         this.name.setText(name);
         this.rating=new TextView(context);
-        this.rating.setText(rating+"");
+        this.rating.setText(rating);
         this.status=new TextView(context);
         this.status.setText(status);
         this.image=new ImageView(context);
         new DownloadImageFromInternet(image).execute(imageURL);
         button=new Button(context);
-        button.setText("Add to favorites");
+        button.setTextSize(8);
+        button.setText("+");
         card=new CardView(context);
+        card.setLayoutParams(cardMargins);
         tableLayout=new TableLayout(context);
         TableRow row1=new TableRow(context);
         TableRow row2=new TableRow(context);
-        row1.addView(this.name);
+        TableLayout.LayoutParams lpr1=new TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,TableRow.LayoutParams.MATCH_PARENT);
+        row1.setLayoutParams(lpr1);
+        row2.setLayoutParams(lpr1);
+        row1.setGravity(Gravity.LEFT);
+        row2.setGravity(Gravity.LEFT);
         row1.addView(this.image);
+        row1.addView(this.name);
         row2.addView(this.rating);
         row2.addView(this.status);
         row2.addView(this.button);
-        row1.setPadding(100,100,100,100);
-        row2.setPadding(100,100,100,100);
         tableLayout.addView(row1);
         tableLayout.addView(row2);
         card.addView(tableLayout);
-        card.setPadding(20,20,20,20);
     }
 
     public TextView getName() {
@@ -98,6 +107,7 @@ public class ShowCard{
 
         protected void onPostExecute(Bitmap result) {
             imageView.setImageBitmap(result);
+
         }
     }
 
