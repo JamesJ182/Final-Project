@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(R.style.AppTheme); // After the Splash Screen is displayed (which takes place in MainActivity), setTheme sets the style back to the normal layout
+        setTheme(R.style.AppTheme); // After the splash_2 is displayed (which takes place in MainActivity), setTheme sets the style back to the normal layout
         setContentView(R.layout.activity_main);
         TabLayout tabs=findViewById(R.id.tabs);
         ViewPager viewPager=findViewById(R.id.pager);
