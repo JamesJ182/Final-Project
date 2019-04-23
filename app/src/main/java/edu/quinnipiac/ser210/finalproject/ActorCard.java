@@ -4,14 +4,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.TabLayout;
 import android.support.v7.widget.CardView;
-import android.util.LayoutDirection;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -19,29 +15,32 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.io.InputStream;
-import java.net.URL;
 
-public class ShowCard{
+public class ActorCard {
+
     private CardView card;
     private TextView name;
-    private TextView rating;
-    private TextView status;
+    private TextView birthday;
+    private TextView deathday;
+    private TextView birthplace;
     private ImageView image;
     private Button button;
     private TableLayout tableLayout;
 
-    public ShowCard (String name, String status, String imageURL, String rating, Context context)
+    public ActorCard (String name, String birthday, String imageURL, String deathday, String birthplace,Context context)
     {
         LinearLayout.LayoutParams cardMargins = new LinearLayout.LayoutParams(CardView.LayoutParams.MATCH_PARENT, CardView.LayoutParams.WRAP_CONTENT);
         cardMargins.setMargins(20,20,20,20);
         this.name=new TextView(context);
         this.name.setText(name);
-        this.rating=new TextView(context);
-        this.rating.setText(rating);
-        this.status=new TextView(context);
-        this.status.setText(status);
+        this.birthday=new TextView(context);
+        this.birthday.setText(birthday);
+        this.deathday=new TextView(context);
+        this.deathday.setText(deathday);
+        this.birthplace=new TextView(context);
+        this.birthplace.setText(birthplace);
         this.image=new ImageView(context);
-        new DownloadImageFromInternet(image).execute(imageURL);
+        new ActorCard.DownloadImageFromInternet(image).execute(imageURL);
         button=new Button(context);
         button.setTextSize(8);
         button.setText("+");
@@ -50,13 +49,16 @@ public class ShowCard{
         tableLayout=new TableLayout(context);
         TableRow row1=new TableRow(context);
         TableRow row2=new TableRow(context);
+        TableRow row3=new TableRow(context);
         row1.addView(this.image);
         row1.addView(this.name);
-        row2.addView(this.rating);
-        row2.addView(this.status);
-        row2.addView(this.button);
+        row2.addView(this.birthday);
+        row2.addView(this.deathday);
+        row3.addView(this.birthplace);
+        row3.addView(this.button);
         tableLayout.addView(row1);
         tableLayout.addView(row2);
+        tableLayout.addView(row3);
         card.addView(tableLayout);
     }
 
@@ -68,14 +70,16 @@ public class ShowCard{
         return image;
     }
 
-    public TextView getRating() {
-        return rating;
+    public TextView getBirthday() {
+        return birthday;
     }
 
-    public TextView getStatus() {
-        return status;
+    public TextView getBirthplace() {
+        return birthplace;
     }
-
+    public TextView getDeathday() {
+        return deathday;
+    }
     public CardView getCard() {
         return card;
     }
@@ -106,5 +110,4 @@ public class ShowCard{
 
         }
     }
-
 }

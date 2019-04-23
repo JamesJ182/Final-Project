@@ -24,9 +24,12 @@ import java.net.URL;
 public class FetchDetails extends AsyncTask<Boolean,Void,Void> {
 
     private String search;
-    private final String PART_OF_URL = "https://tvjan-tvmaze-v1.p.rapidapi.com/search/shows?q=";
+    private final String PART_OF_URL_SHOW = "https://tvjan-tvmaze-v1.p.rapidapi.com/search/shows?q=";
+    private final String PART_OF_URL_ACTOR = "https://tvjan-tvmaze-v1.p.rapidapi.com/search/people?q=";
     private String[] showNames;
     private String[] showNameJSON;
+    private String[] actorNames;
+    private String[] actorNameJSON;
     private Context context;
     private Boolean isShow;
     private OnResultComplete resultListener;
@@ -39,13 +42,18 @@ public class FetchDetails extends AsyncTask<Boolean,Void,Void> {
 
     @Override
     protected Void doInBackground(Boolean... booleans) {
+        while(search.contains(" "))
+        {
+            search=search.replace(" ","%20");
+        }
         isShow=booleans[0];
+        Log.e("isShow Value",isShow+"");
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
         if(isShow)
         {
             try {
-                URL url = new URL(PART_OF_URL + search);//Creates complete search URL
+                URL url = new URL(PART_OF_URL_SHOW + search);//Creates complete search URL
 
                 //Opens connection to API
                 urlConnection = (HttpURLConnection) url.openConnection();
@@ -92,8 +100,51 @@ public class FetchDetails extends AsyncTask<Boolean,Void,Void> {
         }
         else
         {
-            //isActor
-            //To be implemented
+            try {
+                URL url = new URL(PART_OF_URL_ACTOR + search);//Creates complete search URL
+
+                //Opens connection to API
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.setRequestProperty("X-RapidAPI-Key", "2cf6f93237mshc56bd9d910ab8ffp137878jsn13d36c0c4b24");
+                urlConnection.connect();
+
+                //Gets JSON from API
+                InputStream in = urlConnection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(in));
+
+                //Gets data into a JSON string, then goes to the handler to receive JSON in an organized, useful way
+                String actorJsonString = getBufferStringFromBuffer(reader).toString();
+                ShowSpinnerHandler SSH=new ShowSpinnerHandler();
+
+                //Handler gets the name of the shows, and the JSON Object which contain the details
+                actorNames=SSH.createArrayOfActors(actorJsonString);
+                actorNameJSON=new String[actorNames.length];
+                JSONObject[] temp=SSH.getActorNamesJSON();
+                for(int i=0;i<temp.length;i++)
+                {
+                    //Converts the Json objects to Strings
+                    actorNameJSON[i]=temp[i].toString();
+                }
+
+
+
+
+            } catch (Exception e) {
+                Log.e("Error balls",e.getMessage());
+                return null;
+            } finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    } catch (IOException e) {
+                        return null;
+                    }
+                }
+            }
         }
         return null;
     }
@@ -104,17 +155,15 @@ public class FetchDetails extends AsyncTask<Boolean,Void,Void> {
         if(isShow)
         {
             //Storing information in the intent
+            intent.putExtra("isShow",true);
             intent.putExtra("Show Names",showNames);
             intent.putExtra("JSON Strings",showNameJSON);
         }
         else
         {
-            /*
-            For actors
-            //Storing information in the intent
-            intent.putExtra("Show Names",showNames);
-            intent.putExtra("JSON Strings",showNameJSON);
-            */
+            intent.putExtra("isShow",false);
+            intent.putExtra("Actor Names",actorNames);
+            intent.putExtra("JSON Actor Strings",actorNameJSON);
         }
         if (context instanceof OnResultComplete) {
             resultListener = (OnResultComplete) context;
@@ -140,16 +189,6 @@ public class FetchDetails extends AsyncTask<Boolean,Void,Void> {
             return null;
 
         return buffer;
-    }
-
-    public String[] getShowNames()
-    {
-        return showNames;
-    }
-
-    public String[] getShowNamesInJSON()
-    {
-        return showNameJSON;
     }
 
     //After retrieving information, the data gets sent to the Result Activity.

@@ -7,6 +7,8 @@ Author:James Jacobson
  */
 package edu.quinnipiac.ser210.finalproject;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -15,6 +17,8 @@ public class ShowSpinnerHandler {
     //Instance Variables
     private JSONObject[] showNamesJSON;//The JSON objects that contain the details
     private String[] showNames;//The titles of the shows
+    private JSONObject[] actorNamesJSON;//The JSON objects that contain the details
+    private String[] actorNames;//The titles of the shows
 
 
     public String[]createArrayOfShows(String showString) throws org.json.JSONException
@@ -32,10 +36,30 @@ public class ShowSpinnerHandler {
         return showNames;//Returns the shows title
     }
 
+    public String[]createArrayOfActors(String actorString) throws org.json.JSONException
+    {
+        JSONArray allActors=new JSONArray(actorString);//The entire JSON string, converted into a JSON array
+        actorNamesJSON=new JSONObject[allActors.length()];
+        actorNames=new String[allActors.length()];
+        for(int i=0;i<allActors.length();i++)
+        {
+            JSONObject singleShow=allActors.getJSONObject(i);//Gets a show at position i
+            JSONObject showName=singleShow.getJSONObject("person");//Gets the title of the show
+            actorNamesJSON[i]=singleShow;//Saves that show
+            actorNames[i]=showName.getString("name");//Saves the shows title
+            Log.e("name",actorNames[i]);
+        }
+        return actorNames;//Returns the shows title
+    }
+
     //Gets the shows and its details as a JSONObject array
     public JSONObject[] getShowNamesJSON()
     {
         return showNamesJSON;
+    }
+    public JSONObject[] getActorNamesJSON()
+    {
+        return actorNamesJSON;
     }
 
 }
