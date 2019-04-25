@@ -34,6 +34,10 @@ public class ShowResultsActivity extends AppCompatActivity {
                     JSONObject show = temp2.getJSONObject("show");
                     String showName = show.getString("name");
                     String rating = show.getJSONObject("rating").getString("average");
+                    if(rating.equals("null"))
+                    {
+                        rating="N/A";
+                    }
                     String status = show.getString("status");
                     String premierd = show.getString("premiered");//Unused as of now
                     String runTime = show.getString("runtime");//Unused as of now

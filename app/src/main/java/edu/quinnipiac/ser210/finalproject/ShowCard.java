@@ -44,19 +44,21 @@ public class ShowCard{
         new DownloadImageFromInternet(image).execute(imageURL);
         button=new Button(context);
         button.setTextSize(8);
-        button.setText("+");
+        button.setText("Add to Favorites");
         card=new CardView(context);
         card.setLayoutParams(cardMargins);
         tableLayout=new TableLayout(context);
         TableRow row1=new TableRow(context);
         TableRow row2=new TableRow(context);
+        TableRow row3=new TableRow(context);
         row1.addView(this.image);
         row1.addView(this.name);
         row2.addView(this.rating);
         row2.addView(this.status);
-        row2.addView(this.button);
+        row3.addView(this.button);
         tableLayout.addView(row1);
         tableLayout.addView(row2);
+        tableLayout.addView(row3);
         card.addView(tableLayout);
     }
 

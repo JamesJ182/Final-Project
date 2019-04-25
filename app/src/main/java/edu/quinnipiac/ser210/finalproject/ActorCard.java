@@ -43,7 +43,7 @@ public class ActorCard {
         new ActorCard.DownloadImageFromInternet(image).execute(imageURL);
         button=new Button(context);
         button.setTextSize(8);
-        button.setText("+");
+        button.setText("Add to Favorites");
         card=new CardView(context);
         card.setLayoutParams(cardMargins);
         tableLayout=new TableLayout(context);
