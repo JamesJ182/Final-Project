@@ -30,10 +30,8 @@ public class ShowResultsActivity extends AppCompatActivity {
             String[] JSONStrings = getIntent().getStringArrayExtra("JSON Strings");
             for (String temp : JSONStrings) {
                 try {
-                    Log.e("in show result", "In for");
                     JSONObject temp2 = new JSONObject(temp);
                     JSONObject show = temp2.getJSONObject("show");
-                    Log.e("in show result", "made show");
                     String showName = show.getString("name");
                     String rating = show.getJSONObject("rating").getString("average");
                     String status = show.getString("status");
