@@ -45,7 +45,6 @@ public class ShowResultsActivity extends AppCompatActivity {
                     ShowCard card = new ShowCard(showName, status, image, rating, this);
                     ln.addView(card.getCard());
                 } catch (JSONException e) {
-                    Log.e("in show result", "ERROR");
                     e.printStackTrace();
                 }
 
@@ -58,7 +57,6 @@ public class ShowResultsActivity extends AppCompatActivity {
                 try {
                     JSONObject temp2 = new JSONObject(temp);
                     JSONObject actor = temp2.getJSONObject("person");
-                    Log.e("in show result", "made show");
                     String actorName = actor.getString("name");
                     String birthday = actor.getString("birthday");
                     String deathday = actor.getString("deathday");
@@ -71,7 +69,6 @@ public class ShowResultsActivity extends AppCompatActivity {
                     ActorCard card = new ActorCard(actorName,birthday,image,deathday,birthplace,this);
                     ln.addView(card.getCard());
                 } catch (JSONException e) {
-                    Log.e("in show result", "ERROR");
                     e.printStackTrace();
                 }
 

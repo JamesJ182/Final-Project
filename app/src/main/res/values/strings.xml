@@ -5,7 +5,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="search_for_a_show">Search for a show</string>
     <string name="search_for_an_actor">Search for an actor</string>
-    <string name="search">search</string>
+    <string name="search">Search</string>
     <string name="tv_show">TV show</string>
     <string name="actor">Actor</string>
+    <item type="id" name="show_text_debug"/>
+    <string name="show_divider">Shows</string>
+    <string name="actor_divider">People</string>
 </resources>

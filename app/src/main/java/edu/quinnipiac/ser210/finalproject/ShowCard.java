@@ -1,6 +1,7 @@
 package edu.quinnipiac.ser210.finalproject;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -10,6 +11,7 @@ import android.support.v7.widget.CardView;
 import android.util.LayoutDirection;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -17,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -29,11 +32,13 @@ public class ShowCard{
     private ImageView image;
     private Button button;
     private TableLayout tableLayout;
+    private Context context;
 
-    public ShowCard (String name, String status, String imageURL, String rating, Context context)
+    public ShowCard (final String name, final String status, final String imageURL, final String rating, final Context context)
     {
         LinearLayout.LayoutParams cardMargins = new LinearLayout.LayoutParams(CardView.LayoutParams.MATCH_PARENT, CardView.LayoutParams.WRAP_CONTENT);
         cardMargins.setMargins(20,20,20,20);
+        this.context=context;
         this.name=new TextView(context);
         this.name.setText(name);
         this.rating=new TextView(context);
@@ -44,9 +49,9 @@ public class ShowCard{
         new DownloadImageFromInternet(image).execute(imageURL);
         button=new Button(context);
         button.setTextSize(8);
-        button.setText("Add to Favorites");
         card=new CardView(context);
         card.setLayoutParams(cardMargins);
+        this.name.setId(R.id.show_text_debug);
         tableLayout=new TableLayout(context);
         TableRow row1=new TableRow(context);
         TableRow row2=new TableRow(context);
@@ -60,6 +65,27 @@ public class ShowCard{
         tableLayout.addView(row2);
         tableLayout.addView(row3);
         card.addView(tableLayout);
+
+        if(this.context instanceof  ShowResultsActivity) {
+            button.setText("Add to Favorites");
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new ShowFavoritesTask().execute(name, status, rating, imageURL);
+                }
+            });
+        }
+        else
+        {
+            button.setText("Delete from Favorites");
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new ShowFavoritesTask().execute(name, status, rating, imageURL);
+                }
+            });
+
+        }
     }
 
     public TextView getName() {
@@ -106,6 +132,35 @@ public class ShowCard{
         protected void onPostExecute(Bitmap result) {
             imageView.setImageBitmap(result);
 
+        }
+    }
+
+    private class ShowFavoritesTask extends AsyncTask<String,Void,Void>
+    {
+
+        private boolean sucessfullyAdded=true;
+        @Override
+        protected Void doInBackground(String... showDetails) {
+                FavoritesDatabaseHelper fb= new FavoritesDatabaseHelper(context);
+                if(context instanceof ShowResultsActivity) {
+                    sucessfullyAdded=fb.saveShow(fb.getReadableDatabase(), showDetails[0], showDetails[1], showDetails[2], showDetails[3]);
+                }
+                else
+                {
+                    fb.deleteShow(fb.getReadableDatabase(), showDetails[3],context,ShowCard.this);
+                }
+                return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            getCard().setVisibility(View.GONE);
+            if(!sucessfullyAdded)
+            {
+                Toast toast=Toast.makeText(context,"Already in favorites",Toast.LENGTH_SHORT);
+                toast.show();
+            }
         }
     }
 

@@ -47,7 +47,6 @@ public class ShowSpinnerHandler {
             JSONObject showName=singleShow.getJSONObject("person");//Gets the title of the show
             actorNamesJSON[i]=singleShow;//Saves that show
             actorNames[i]=showName.getString("name");//Saves the shows title
-            Log.e("name",actorNames[i]);
         }
         return actorNames;//Returns the shows title
     }

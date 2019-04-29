@@ -7,12 +7,14 @@ import android.os.AsyncTask;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.InputStream;
 
@@ -26,11 +28,13 @@ public class ActorCard {
     private ImageView image;
     private Button button;
     private TableLayout tableLayout;
+    private Context context;
 
-    public ActorCard (String name, String birthday, String imageURL, String deathday, String birthplace,Context context)
+    public ActorCard (final String name, final String birthday, final String imageURL, final String deathday, String birthplace, Context context)
     {
         LinearLayout.LayoutParams cardMargins = new LinearLayout.LayoutParams(CardView.LayoutParams.MATCH_PARENT, CardView.LayoutParams.WRAP_CONTENT);
         cardMargins.setMargins(20,20,20,20);
+        this.context=context;
         this.name=new TextView(context);
         this.name.setText(name);
         this.birthday=new TextView(context);
@@ -42,6 +46,7 @@ public class ActorCard {
         this.image=new ImageView(context);
         new ActorCard.DownloadImageFromInternet(image).execute(imageURL);
         button=new Button(context);
+        Button shareButton=new Button(context);
         button.setTextSize(8);
         button.setText("Add to Favorites");
         card=new CardView(context);
@@ -60,6 +65,29 @@ public class ActorCard {
         tableLayout.addView(row2);
         tableLayout.addView(row3);
         card.addView(tableLayout);
+
+        if(this.context instanceof  ShowResultsActivity) {
+            button.setText("Add to Favorites");
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new ActorFavoritesTask().execute(name,birthday,deathday,birthday,imageURL);
+                }
+            });
+        }
+        else
+        {
+            button.setText("Delete from Favorites");
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new ActorFavoritesTask().execute(name,birthday,deathday,birthday,imageURL);
+                }
+            });
+
+        }
+
+
     }
 
     public TextView getName() {
@@ -99,7 +127,6 @@ public class ActorCard {
                 bimage = BitmapFactory.decodeStream(in);
 
             } catch (Exception e) {
-                Log.e("Error Message", e.getMessage());
                 e.printStackTrace();
             }
             return bimage;
@@ -108,6 +135,37 @@ public class ActorCard {
         protected void onPostExecute(Bitmap result) {
             imageView.setImageBitmap(result);
 
+        }
+    }
+
+
+    private class ActorFavoritesTask extends AsyncTask<String,Void,Void>
+    {
+
+        private boolean sucessfullyAdded=true;
+        @Override
+        protected Void doInBackground(String... actorDetails) {
+            FavoritesDatabaseHelper fb= new FavoritesDatabaseHelper(context);
+            if(context instanceof  ShowResultsActivity) {
+                sucessfullyAdded=fb.saveActor(fb.getReadableDatabase(), actorDetails[0], actorDetails[1], actorDetails[2], actorDetails[3], actorDetails[4]);
+            }
+            else
+            {
+                fb.deleteActor(fb.getReadableDatabase(),actorDetails[4]);
+            }
+            return null;
+
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            getCard().setVisibility(View.GONE);
+            if(!sucessfullyAdded)
+            {
+                Toast toast=Toast.makeText(context,"Already in favorites",Toast.LENGTH_SHORT);
+                toast.show();
+            }
         }
     }
 }
