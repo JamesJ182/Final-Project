@@ -12,8 +12,10 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme.Launcher">
-        <activity android:name=".AboutActivity"></activity>
-        <activity android:name=".ShowResultsActivity" />
+        <activity android:name=".AboutActivity"
+            android:parentActivityName=".MainActivity"></activity>
+        <activity android:name=".ShowResultsActivity"
+            android:parentActivityName=".MainActivity"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -91,6 +91,7 @@ public class FavoritesFragment extends Fragment{
         ln.removeAllViews();
         new FetchFavoritesFromDatabase().execute();
         super.onStart();
+
     }
 
     @Override
@@ -112,10 +113,6 @@ public class FavoritesFragment extends Fragment{
         protected Void doInBackground(Void... voids) {
             FavoritesDatabaseHelper fb=new FavoritesDatabaseHelper(getContext());
             SQLiteDatabase db=fb.getReadableDatabase();
-            int showTableLength=(int) DatabaseUtils.queryNumEntries(db,"FAVORITES_SHOW");
-            /*Cursor cursorShow = db.query("FAVORITES_SHOW", new String[]
-                                {"NAME", "STATUS", "IMAGE_URL", "RATING"}, "_id = ?",
-                        null, null, null, null, null);*/
             Cursor cursorShow=db.rawQuery("SELECT * FROM FAVORITES_SHOW",null);
             cursorShow.moveToFirst();
             showCards=new ArrayList<ShowCard>();//Check this, this might crash everything

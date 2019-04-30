@@ -1,9 +1,11 @@
 package edu.quinnipiac.ser210.finalproject;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.LinearLayout;
 
@@ -24,6 +26,10 @@ public class ShowResultsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_show_results);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
+        setSupportActionBar(toolbar);
+        ActionBar ab=getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
         //CardViews are organized in a linear layout
         LinearLayout ln=(LinearLayout)findViewById(R.id.linear_layout_result);
         if(getIntent().getBooleanExtra("isShow",true)) {

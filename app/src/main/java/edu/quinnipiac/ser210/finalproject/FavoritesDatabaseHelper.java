@@ -80,7 +80,7 @@ public class FavoritesDatabaseHelper extends SQLiteOpenHelper {
             actorValues.put("NAME", name);
             actorValues.put("BIRTHDAY", birthday);
             actorValues.put("DEATHDAY", deathday);
-            actorValues.put("BIRTHPLACE", birthday);
+            actorValues.put("BIRTHPLACE", birthplace);
             actorValues.put("IMAGE_URL", url);
             db.insert("FAVORITES_ACTOR", null, actorValues);
             return true;

@@ -11,6 +11,10 @@
     android:layout_height="match_parent"
     tools:context=".AboutActivity">
 
+    <include
+        android:id="@+id/toolbar_main"
+        layout="@layout/toolbar_main" />
+
 
     <TextView
         android:id="@+id/textView"

@@ -30,7 +30,7 @@ public class ActorCard {
     private TableLayout tableLayout;
     private Context context;
 
-    public ActorCard (final String name, final String birthday, final String imageURL, final String deathday, String birthplace, Context context)
+    public ActorCard (final String name, final String birthday, final String imageURL, final String deathday, final String birthplace, Context context)
     {
         LinearLayout.LayoutParams cardMargins = new LinearLayout.LayoutParams(CardView.LayoutParams.MATCH_PARENT, CardView.LayoutParams.WRAP_CONTENT);
         cardMargins.setMargins(20,20,20,20);
@@ -71,7 +71,7 @@ public class ActorCard {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new ActorFavoritesTask().execute(name,birthday,deathday,birthday,imageURL);
+                    new ActorFavoritesTask().execute(name,birthday,deathday,birthplace,imageURL);
                 }
             });
         }
@@ -81,7 +81,7 @@ public class ActorCard {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new ActorFavoritesTask().execute(name,birthday,deathday,birthday,imageURL);
+                    new ActorFavoritesTask().execute(name,birthday,deathday,birthplace,imageURL);
                 }
             });
 
