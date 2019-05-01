@@ -1,9 +1,11 @@
 package edu.quinnipiac.ser210.finalproject;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.Gravity;
@@ -30,7 +32,7 @@ public class ActorCard {
     private TableLayout tableLayout;
     private Context context;
 
-    public ActorCard (final String name, final String birthday, final String imageURL, final String deathday, final String birthplace, Context context)
+    public ActorCard (final String name, final String birthday, final String imageURL, final String deathday, final String birthplace, final Context context)
     {
         LinearLayout.LayoutParams cardMargins = new LinearLayout.LayoutParams(CardView.LayoutParams.MATCH_PARENT, CardView.LayoutParams.WRAP_CONTENT);
         cardMargins.setMargins(20,20,20,20);
@@ -81,7 +83,24 @@ public class ActorCard {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new ActorFavoritesTask().execute(name,birthday,deathday,birthplace,imageURL);
+                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which){
+                                case DialogInterface.BUTTON_POSITIVE:
+                                    new ActorFavoritesTask().execute(name,birthday,deathday,birthplace,imageURL);
+                                    break;
+
+                                case DialogInterface.BUTTON_NEGATIVE:
+                                    //No button clicked
+                                    break;
+                            }
+                        }
+                    };
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
+                            .setNegativeButton("No", dialogClickListener).show();
                 }
             });
 

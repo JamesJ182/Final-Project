@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -55,6 +56,12 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
+    }
+
+    public void displayNoResultsFound()
+    {
+        Toast toast=Toast.makeText(this,"No Results Found",Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     @Override

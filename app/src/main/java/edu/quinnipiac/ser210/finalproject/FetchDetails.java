@@ -31,13 +31,15 @@ public class FetchDetails extends AsyncTask<Boolean,Void,Void> {
     private String[] actorNames;
     private String[] actorNameJSON;
     private Context context;
-    private Boolean isShow;
+    private boolean isShow;
+    private boolean resultFound;
     private OnResultComplete resultListener;
 
     public FetchDetails(String str, Context context)
     {
         this.search=str;
         this.context=context;
+        resultFound=true;
     }
 
     @Override
@@ -83,7 +85,7 @@ public class FetchDetails extends AsyncTask<Boolean,Void,Void> {
 
 
             } catch (Exception e) {
-                Log.e("Error",e.getMessage());
+                resultFound=false;
                 return null;
             } finally {
                 if (urlConnection != null) {
@@ -131,7 +133,7 @@ public class FetchDetails extends AsyncTask<Boolean,Void,Void> {
 
 
             } catch (Exception e) {
-                Log.e("Error balls",e.getMessage());
+                resultFound=false;
                 return null;
             } finally {
                 if (urlConnection != null) {
@@ -152,28 +154,30 @@ public class FetchDetails extends AsyncTask<Boolean,Void,Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         Intent intent=new Intent(context,ShowResultsActivity.class);
-        if(isShow)
-        {
-            //Storing information in the intent
-            intent.putExtra("isShow",true);
-            intent.putExtra("Show Names",showNames);
-            intent.putExtra("JSON Strings",showNameJSON);
+        if(resultFound) {
+            if (isShow) {
+                //Storing information in the intent
+                intent.putExtra("isShow", true);
+                intent.putExtra("Show Names", showNames);
+                intent.putExtra("JSON Strings", showNameJSON);
+            } else {
+                intent.putExtra("isShow", false);
+                intent.putExtra("Actor Names", actorNames);
+                intent.putExtra("JSON Actor Strings", actorNameJSON);
+            }
+            if (context instanceof OnResultComplete) {
+                resultListener = (OnResultComplete) context;
+            } else {
+                throw new RuntimeException(context.toString()
+                        + " must implement OnResultListener");
+            }
+            resultListener.startResultActivity(intent);
         }
         else
         {
-            intent.putExtra("isShow",false);
-            intent.putExtra("Actor Names",actorNames);
-            intent.putExtra("JSON Actor Strings",actorNameJSON);
+            MainActivity activity=(MainActivity)context;
+            activity.displayNoResultsFound();
         }
-        if (context instanceof OnResultComplete) {
-            resultListener = (OnResultComplete) context;
-        }
-        else
-        {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnResultListener");
-        }
-        resultListener.startResultActivity(intent);
         super.onPostExecute(aVoid);
     }
 
