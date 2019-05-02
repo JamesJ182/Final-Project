@@ -22,7 +22,7 @@ import java.net.URL;
  */
 
 public class FetchDetails extends AsyncTask<Boolean,Void,Void> {
-
+    //I hope this works
     private String search;
     private final String PART_OF_URL_SHOW = "https://tvjan-tvmaze-v1.p.rapidapi.com/search/shows?q=";
     private final String PART_OF_URL_ACTOR = "https://tvjan-tvmaze-v1.p.rapidapi.com/search/people?q=";
