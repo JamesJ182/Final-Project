@@ -2,6 +2,7 @@ package edu.quinnipiac.ser210.finalproject;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -29,6 +30,7 @@ public class ActorCard {
     private TextView birthplace;
     private ImageView image;
     private Button button;
+    private Button buttonShare;
     private TableLayout tableLayout;
     private Context context;
 
@@ -48,9 +50,9 @@ public class ActorCard {
         this.image=new ImageView(context);
         new ActorCard.DownloadImageFromInternet(image).execute(imageURL);
         button=new Button(context);
-        Button shareButton=new Button(context);
-        button.setTextSize(8);
-        button.setText("Add to Favorites");
+        button.setTextSize(10);
+        buttonShare=new Button(context);
+        buttonShare.setTextSize(10);
         card=new CardView(context);
         card.setLayoutParams(cardMargins);
         tableLayout=new TableLayout(context);
@@ -63,10 +65,24 @@ public class ActorCard {
         row2.addView(this.deathday);
         row3.addView(this.birthplace);
         row3.addView(this.button);
+        row3.addView(this.buttonShare);
         tableLayout.addView(row1);
         tableLayout.addView(row2);
         tableLayout.addView(row3);
         card.addView(tableLayout);
+
+        //Share Show button-related code
+        buttonShare.setText("Share Show");
+        buttonShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                //Share the show's information with other people (using an IMPLICIT intent)
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "You should check out this actor: " + name + ", Birthday: " + birthday + ", Birthplace: " + birthplace);
+                context.startActivity(Intent.createChooser(shareIntent, "Share Using"));
+            }
+        });
 
         if(this.context instanceof  ShowResultsActivity) {
             button.setText("Add to Favorites");

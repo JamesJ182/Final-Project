@@ -2,6 +2,7 @@ package edu.quinnipiac.ser210.finalproject;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -33,6 +34,7 @@ public class ShowCard{
     private TextView status;
     private ImageView image;
     private Button button;
+    private Button buttonShare;
     private TableLayout tableLayout;
     private Context context;
 
@@ -49,8 +51,10 @@ public class ShowCard{
         this.status.setText(status);
         this.image=new ImageView(context);
         new DownloadImageFromInternet(image).execute(imageURL);
-        button=new Button(context);
-        button.setTextSize(8);
+        button=new Button(context); // "Add to Favorites"/"Remove from Favorites" button
+        button.setTextSize(10);
+        buttonShare=new Button(context); // "Share Show" button
+        buttonShare.setTextSize(10);
         card=new CardView(context);
         card.setLayoutParams(cardMargins);
         this.name.setId(R.id.show_text_debug);
@@ -58,16 +62,33 @@ public class ShowCard{
         TableRow row1=new TableRow(context);
         TableRow row2=new TableRow(context);
         TableRow row3=new TableRow(context);
+        TableRow row4=new TableRow(context);
         row1.addView(this.image);
         row1.addView(this.name);
         row2.addView(this.rating);
         row2.addView(this.status);
-        row3.addView(this.button);
+        row3.addView(this.button); //Adds "Add to Favorites" button to row 3
+        row4.addView(this.buttonShare); //Adds "Add to Favorites" button to row 4
         tableLayout.addView(row1);
         tableLayout.addView(row2);
         tableLayout.addView(row3);
+        tableLayout.addView(row4);
         card.addView(tableLayout);
 
+        //Share Show button-related code
+            buttonShare.setText("Share Show");
+            buttonShare.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType("text/plain");
+                    //Share the show's information with other people (using an IMPLICIT intent)
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, "You should check out this show: " + name + ", Rating: " + rating + ", Status: " + status);
+                    context.startActivity(Intent.createChooser(shareIntent, "Share Using"));
+                }
+            });
+
+        //Favorites button-related code
         if(this.context instanceof  ShowResultsActivity) {
             button.setText("Add to Favorites");
             button.setOnClickListener(new View.OnClickListener() {
