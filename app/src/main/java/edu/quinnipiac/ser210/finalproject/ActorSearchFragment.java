@@ -1,5 +1,11 @@
-package edu.quinnipiac.ser210.finalproject;
+/*
+The ActorSearchFragment class
+By James Jacobson and Phillip Nam
+5/3/19
+This class lets the user input a persons name, and sends the message to start searching for them
+ */
 
+package edu.quinnipiac.ser210.finalproject;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,7 +33,6 @@ public class ActorSearchFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     public static ActorSearchFragment newInstance(String param1, String param2) {
         ActorSearchFragment fragment = new ActorSearchFragment();
         Bundle args = new Bundle();
@@ -38,11 +43,7 @@ public class ActorSearchFragment extends Fragment {
     }
 
 
-    /*
-    When the search button is clicked, the text from the search text (EditText) gets converted
-    to a string. That string is then sent to mListener which is responsible for
-    passing the string to the AsyncTask (FetchDetails)
-     */
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +52,12 @@ public class ActorSearchFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+
+    /*
+   When the search button is clicked, the text from the search text (EditText) gets converted
+   to a string. That string is then sent to mListener which is responsible for
+   passing the string to the AsyncTask (FetchDetails)
+    */
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -91,11 +98,7 @@ public class ActorSearchFragment extends Fragment {
         mListener = null;
     }
 
-    public void beginSearch(View view)
-    {
-
-    }
-
+    //Interface that sends a message that the search for actor button was clicked
     public interface OnActorSearchListener {
         void onClickActorSearch(String actor);
     }

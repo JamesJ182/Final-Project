@@ -1,3 +1,10 @@
+/*
+The ShowSearchFragment class
+By James Jacobson and Phillip Nam
+5/3/19
+This class lets the user input a shows name, and sends the message to start searching for it
+ */
+
 package edu.quinnipiac.ser210.finalproject;
 
 import android.content.Context;
@@ -92,10 +99,7 @@ public class ShowSearchFragment extends Fragment {
         mListener = null;
     }
 
-    public void beginSearch(View view)
-    {
-
-    }
+    //Interface that sends a message that the search for show button was clicked
     public interface OnShowSearchListener {
         void onClickShowSearch(String show);
     }

@@ -1,9 +1,9 @@
 /*
 The ShowSpinnerHandler Class
+By James Jacobson and Phillip Nam
+Date:5/3/19
 This class handles the JSON strings and objects to be sent back to the MainActivity in
     a more organized manner
-Date:3/21/19
-Author:James Jacobson
  */
 package edu.quinnipiac.ser210.finalproject;
 
@@ -43,12 +43,12 @@ public class ShowSpinnerHandler {
         actorNames=new String[allActors.length()];
         for(int i=0;i<allActors.length();i++)
         {
-            JSONObject singleShow=allActors.getJSONObject(i);//Gets a show at position i
-            JSONObject showName=singleShow.getJSONObject("person");//Gets the title of the show
+            JSONObject singleShow=allActors.getJSONObject(i);//Gets an actor at position i
+            JSONObject showName=singleShow.getJSONObject("person");//Gets the name of the actor
             actorNamesJSON[i]=singleShow;//Saves that show
-            actorNames[i]=showName.getString("name");//Saves the shows title
+            actorNames[i]=showName.getString("name");//Saves the name of that person
         }
-        return actorNames;//Returns the shows title
+        return actorNames;//Returns the actors names
     }
 
     //Gets the shows and its details as a JSONObject array

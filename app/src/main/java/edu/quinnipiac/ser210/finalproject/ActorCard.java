@@ -1,3 +1,11 @@
+/*
+The ActorCard Class
+By James Jacobson and Phillip Nam
+5/3/19
+This Class represents an actor or actress when either searched for, or when they are
+    in the favorites fragment. Uses a CardView
+ */
+
 package edu.quinnipiac.ser210.finalproject;
 
 import android.content.Context;
@@ -23,6 +31,8 @@ import java.io.InputStream;
 
 public class ActorCard {
 
+    //Instance Variables
+    //Layouts
     private CardView card;
     private TextView name;
     private TextView birthday;
@@ -32,10 +42,13 @@ public class ActorCard {
     private Button button;
     private Button buttonShare;
     private TableLayout tableLayout;
+
+    //The activity the card is located
     private Context context;
 
     public ActorCard (final String name, final String birthday, final String imageURL, final String deathday, final String birthplace, final Context context)
     {
+        //Sets the layout of the card
         LinearLayout.LayoutParams cardMargins = new LinearLayout.LayoutParams(CardView.LayoutParams.MATCH_PARENT, CardView.LayoutParams.WRAP_CONTENT);
         cardMargins.setMargins(20,20,20,20);
         this.context=context;
@@ -48,7 +61,7 @@ public class ActorCard {
         this.birthplace=new TextView(context);
         this.birthplace.setText(birthplace);
         this.image=new ImageView(context);
-        new ActorCard.DownloadImageFromInternet(image).execute(imageURL);
+        new ActorCard.DownloadImageFromInternet(image).execute(imageURL);//Turns the url into a picture
         button=new Button(context);
         button.setTextSize(10);
         buttonShare=new Button(context);
@@ -72,7 +85,7 @@ public class ActorCard {
         card.addView(tableLayout);
 
         //Share Show button-related code
-        buttonShare.setText("Share Show");
+        buttonShare.setText("Share Actor");
         buttonShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,6 +97,8 @@ public class ActorCard {
             }
         });
 
+        //Sets the button to add this person to the database
+        //Occurs when in the card is in the ShowResultsActivity
         if(this.context instanceof  ShowResultsActivity) {
             button.setText("Add to Favorites");
             button.setOnClickListener(new View.OnClickListener() {
@@ -95,19 +110,22 @@ public class ActorCard {
         }
         else
         {
+            //Sets the button to delete this person to the database
+            //Occurs when in the card is in the MainActivity
             button.setText("Delete from Favorites");
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //Dialog box, makes sure the user wants to delete it from the database/favorites
                     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             switch (which){
-                                case DialogInterface.BUTTON_POSITIVE:
+                                case DialogInterface.BUTTON_POSITIVE://Yes
                                     new ActorFavoritesTask().execute(name,birthday,deathday,birthplace,imageURL);
                                     break;
 
-                                case DialogInterface.BUTTON_NEGATIVE:
+                                case DialogInterface.BUTTON_NEGATIVE://No
                                     //No button clicked
                                     break;
                             }
@@ -115,7 +133,7 @@ public class ActorCard {
                     };
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
+                    builder.setMessage("Are you sure you want to delete this person from favorites?").setPositiveButton("Yes", dialogClickListener)
                             .setNegativeButton("No", dialogClickListener).show();
                 }
             });
@@ -125,28 +143,16 @@ public class ActorCard {
 
     }
 
+    //Getters
     public TextView getName() {
         return name;
     }
 
-    public ImageView getImage() {
-        return image;
-    }
-
-    public TextView getBirthday() {
-        return birthday;
-    }
-
-    public TextView getBirthplace() {
-        return birthplace;
-    }
-    public TextView getDeathday() {
-        return deathday;
-    }
     public CardView getCard() {
         return card;
     }
 
+    //This private class converts image urls to an actual image
     private class DownloadImageFromInternet extends AsyncTask<String, Void, Bitmap> {
         ImageView imageView;
 
@@ -168,16 +174,18 @@ public class ActorCard {
         }
 
         protected void onPostExecute(Bitmap result) {
+            //Sets the image
             imageView.setImageBitmap(result);
 
         }
     }
 
-
+    //When the add/delete button is clicked, it does its appropriate action based on context
     private class ActorFavoritesTask extends AsyncTask<String,Void,Void>
     {
 
-        private boolean sucessfullyAdded=true;
+        private boolean sucessfullyAdded=true;//Used to check if the Actor is already in the database
+
         @Override
         protected Void doInBackground(String... actorDetails) {
             FavoritesDatabaseHelper fb= new FavoritesDatabaseHelper(context);
@@ -195,7 +203,7 @@ public class ActorCard {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            getCard().setVisibility(View.GONE);
+            getCard().setVisibility(View.GONE);//Removes the card from the view
             if(!sucessfullyAdded)
             {
                 Toast toast=Toast.makeText(context,"Already in favorites",Toast.LENGTH_SHORT);

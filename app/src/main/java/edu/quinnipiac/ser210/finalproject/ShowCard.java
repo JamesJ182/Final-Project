@@ -1,3 +1,11 @@
+/*
+The ShowCard Class
+By James Jacobson and Phillip Nam
+5/3/19
+This Class represents a show when either searched for, or when they are
+    in the favorites fragment. Uses a CardView
+ */
+
 package edu.quinnipiac.ser210.finalproject;
 
 import android.content.Context;
@@ -28,6 +36,9 @@ import java.io.InputStream;
 import java.net.URL;
 
 public class ShowCard{
+
+    //Instance Variables
+    //Layouts
     private CardView card;
     private TextView name;
     private TextView rating;
@@ -36,10 +47,13 @@ public class ShowCard{
     private Button button;
     private Button buttonShare;
     private TableLayout tableLayout;
+
+    //The activity the card is located
     private Context context;
 
     public ShowCard (final String name, final String status, final String imageURL, final String rating, final Context context)
     {
+        //Sets the layout of the card
         LinearLayout.LayoutParams cardMargins = new LinearLayout.LayoutParams(CardView.LayoutParams.MATCH_PARENT, CardView.LayoutParams.WRAP_CONTENT);
         cardMargins.setMargins(20,20,20,20);
         this.context=context;
@@ -88,7 +102,8 @@ public class ShowCard{
                 }
             });
 
-        //Favorites button-related code
+        //Sets the button to add this show to the database
+        //Occurs when in the card is in the ShowResultsActivity
         if(this.context instanceof  ShowResultsActivity) {
             button.setText("Add to Favorites");
             button.setOnClickListener(new View.OnClickListener() {
@@ -100,10 +115,13 @@ public class ShowCard{
         }
         else
         {
+            //Sets the button to delete this show to the database
+            //Occurs when in the card is in the MainActivity
             button.setText("Delete from Favorites");
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //Dialog box, makes sure the user wants to delete it from the database/favorites
                     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -132,22 +150,11 @@ public class ShowCard{
         return name;
     }
 
-    public ImageView getImage() {
-        return image;
-    }
-
-    public TextView getRating() {
-        return rating;
-    }
-
-    public TextView getStatus() {
-        return status;
-    }
-
     public CardView getCard() {
         return card;
     }
 
+    //This private class converts image urls to an actual image
     private class DownloadImageFromInternet extends AsyncTask<String, Void, Bitmap> {
         ImageView imageView;
 
@@ -170,15 +177,17 @@ public class ShowCard{
         }
 
         protected void onPostExecute(Bitmap result) {
+            //Sets the image
             imageView.setImageBitmap(result);
 
         }
     }
 
+    //When the add/delete button is clicked, it does its appropriate action based on context
     private class ShowFavoritesTask extends AsyncTask<String,Void,Void>
     {
 
-        private boolean sucessfullyAdded=true;
+        private boolean sucessfullyAdded=true;//Used to check if the Actor is already in the database
         @Override
         protected Void doInBackground(String... showDetails) {
                 FavoritesDatabaseHelper fb= new FavoritesDatabaseHelper(context);
@@ -195,7 +204,7 @@ public class ShowCard{
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            getCard().setVisibility(View.GONE);
+            getCard().setVisibility(View.GONE);//Removes the card from the view
             if(!sucessfullyAdded)
             {
                 Toast toast=Toast.makeText(context,"Already in favorites",Toast.LENGTH_SHORT);

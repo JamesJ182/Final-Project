@@ -1,3 +1,11 @@
+/*
+The FetchDetails Class
+By James Jacobson and Phillip Nam
+5/3/19
+This class retrieves the JSON from the API. This data contains Shows and Actors
+ */
+
+
 package edu.quinnipiac.ser210.finalproject;
 
 import android.content.Context;
@@ -23,17 +31,18 @@ import java.net.URL;
 
 public class FetchDetails extends AsyncTask<Boolean,Void,Void> {
 
+    //Instance Variables
     private String search;
-    private final String PART_OF_URL_SHOW = "https://tvjan-tvmaze-v1.p.rapidapi.com/search/shows?q=";
-    private final String PART_OF_URL_ACTOR = "https://tvjan-tvmaze-v1.p.rapidapi.com/search/people?q=";
-    private String[] showNames;
-    private String[] showNameJSON;
-    private String[] actorNames;
-    private String[] actorNameJSON;
+    private final String PART_OF_URL_SHOW = "https://tvjan-tvmaze-v1.p.rapidapi.com/search/shows?q=";//URL for show query
+    private final String PART_OF_URL_ACTOR = "https://tvjan-tvmaze-v1.p.rapidapi.com/search/people?q=";//URL for actor query
+    private String[] showNames;//Strings of the NAMES of the shows
+    private String[] showNameJSON;//Strings of the shows details in JSON format
+    private String[] actorNames;//Strings of the NAMES of the actors
+    private String[] actorNameJSON;//Strings of the actors details in JSON format
     private Context context;
     private boolean isShow;
     private boolean resultFound;
-    private OnResultComplete resultListener;
+    private OnResultComplete resultListener;//A Listener that sends a message once the result is found
 
     public FetchDetails(String str, Context context)
     {
@@ -44,16 +53,19 @@ public class FetchDetails extends AsyncTask<Boolean,Void,Void> {
 
     @Override
     protected Void doInBackground(Boolean... booleans) {
+        //Have to replace all spaces with %20
         while(search.contains(" "))
         {
             search=search.replace(" ","%20");
         }
-        isShow=booleans[0];
-        Log.e("isShow Value",isShow+"");
+        isShow=booleans[0];//1 boolean variable representing a show or actor
+
+        //Connects to the API
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
-        if(isShow)
+        if(isShow)//Connects to the show API if its a show
         {
+            //Tries connecting
             try {
                 URL url = new URL(PART_OF_URL_SHOW + search);//Creates complete search URL
 
@@ -85,7 +97,7 @@ public class FetchDetails extends AsyncTask<Boolean,Void,Void> {
 
 
             } catch (Exception e) {
-                resultFound=false;
+                resultFound=false;// no result was found or nothing was entered in
                 return null;
             } finally {
                 if (urlConnection != null) {
@@ -100,7 +112,7 @@ public class FetchDetails extends AsyncTask<Boolean,Void,Void> {
                 }
             }
         }
-        else
+        else//is an actor
         {
             try {
                 URL url = new URL(PART_OF_URL_ACTOR + search);//Creates complete search URL
@@ -119,7 +131,7 @@ public class FetchDetails extends AsyncTask<Boolean,Void,Void> {
                 String actorJsonString = getBufferStringFromBuffer(reader).toString();
                 ShowSpinnerHandler SSH=new ShowSpinnerHandler();
 
-                //Handler gets the name of the shows, and the JSON Object which contain the details
+                //Handler gets the name of the actors, and the JSON Object which contain the details
                 actorNames=SSH.createArrayOfActors(actorJsonString);
                 actorNameJSON=new String[actorNames.length];
                 JSONObject[] temp=SSH.getActorNamesJSON();
@@ -154,13 +166,14 @@ public class FetchDetails extends AsyncTask<Boolean,Void,Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         Intent intent=new Intent(context,ShowResultsActivity.class);
-        if(resultFound) {
-            if (isShow) {
-                //Storing information in the intent
+        if(resultFound) {//If a result was found
+            if (isShow) {//If the result was shows
+                //Storing information in the intent to send the list of shows to the ShowResultsActivity
                 intent.putExtra("isShow", true);
                 intent.putExtra("Show Names", showNames);
                 intent.putExtra("JSON Strings", showNameJSON);
             } else {
+                //Storing information in the intent to send the list of actors to the ShowResultsActivity
                 intent.putExtra("isShow", false);
                 intent.putExtra("Actor Names", actorNames);
                 intent.putExtra("JSON Actor Strings", actorNameJSON);
@@ -171,9 +184,10 @@ public class FetchDetails extends AsyncTask<Boolean,Void,Void> {
                 throw new RuntimeException(context.toString()
                         + " must implement OnResultListener");
             }
-            resultListener.startResultActivity(intent);
+            resultListener.startResultActivity(intent);//Tells the activity to star the result activity,
+                                                            // since this class can not do that
         }
-        else
+        else//If there was no result
         {
             MainActivity activity=(MainActivity)context;
             activity.displayNoResultsFound();

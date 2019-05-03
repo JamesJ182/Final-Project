@@ -1,3 +1,10 @@
+/*
+The MainActivity Class
+By James Jacobson and Phillip Nam
+5/3/19
+This class contains all of the fragments, and can start the ShowResultsActivity
+ */
+
 package edu.quinnipiac.ser210.finalproject;
 
 import android.content.Context;
@@ -28,14 +35,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
-/**
- * MainActivity class is responsible for nesting a TabLayout (containing 3 tabs)
- * and each tab nests a fragment (ShowSearchFragment, ActorSearchFragment, FavoritesFragment)
- *
- */
-
-public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,
-        ShowSearchFragment.OnShowSearchListener,FavoritesFragment.OnFragmentInteractionListener, ActorSearchFragment.OnActorSearchListener,
+public class MainActivity extends AppCompatActivity implements ShowSearchFragment.OnShowSearchListener,FavoritesFragment.OnFragmentInteractionListener, ActorSearchFragment.OnActorSearchListener,
     FetchDetails.OnResultComplete{
 
     private final static int SHOW_FRAGMENT=0;
@@ -48,22 +48,27 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         super.onCreate(savedInstanceState);
         setTheme(R.style.AppTheme); // After the splash_3 is displayed (which takes place in MainActivity), setTheme sets the style back to the normal layout
         setContentView(R.layout.activity_main);
+
+        //Gets the tab layout and the view pager, and adds the fragments to them
         TabLayout tabs=findViewById(R.id.tabs);
         ViewPager viewPager=findViewById(R.id.pager);
         adapter=new SectionsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
         tabs.setupWithViewPager(viewPager);
 
+        //Sets the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
     }
 
+    //Creates a toast if there were no results found
     public void displayNoResultsFound()
     {
         Toast toast=Toast.makeText(this,"No Results Found",Toast.LENGTH_SHORT);
         toast.show();
     }
 
+    //Adds the toolbar icons to the toolbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -71,14 +76,15 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         return true;
     }
 
+    //Gives the toolbar icons functionality
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.about:
+            case R.id.about://When the about icon is clicked
                 Intent intent = new Intent(this, AboutActivity.class);
                 startActivity(intent);
                 return true;
-            case R.id.share_app:
+            case R.id.share_app://When the share app icon is click
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
                 //A message that shares the Show Guru app with other people (using an IMPLICIT intent)
@@ -91,38 +97,27 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onPageScrolled(int i, float v, int i1) {
-
-    }
-
-    @Override
-    public void onPageSelected(int i) {
-
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int i) {
-
-    }
-
+    //When the button is clicked to search for a show, begin the search
     @Override
     public void onClickShowSearch(String show) {
         //Searching for a show sets boolean = true which tells FetchDetails to grab JSON Data related to shows
         new FetchDetails(show,this).execute(true);
     }
 
+    //Has to implement this
     @Override
     public void onFragmentInteraction(Uri uri) {
 
     }
 
+    //When the button is clicked to search for an actor, begin the search
     @Override
     public void onClickActorSearch(String actor) {
         //Searching for an actor sets boolean = false which tells FetchDetails to grab JSON Data related to actors
         new FetchDetails(actor,this).execute(false);
     }
 
+    //Starts the ShowResultsActivity with an intent from FetchDetails
     @Override
     public void startResultActivity(Intent intent) {
         startActivity(intent);
