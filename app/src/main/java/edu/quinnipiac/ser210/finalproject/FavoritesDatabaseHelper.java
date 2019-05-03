@@ -57,6 +57,7 @@ public class FavoritesDatabaseHelper extends SQLiteOpenHelper {
             showValues.put("RATING", rating);
             showValues.put("IMAGE_URL", url);
             db.insert("FAVORITES_SHOW", null, showValues);
+            cursor.close();
             return true;
         }
         else
